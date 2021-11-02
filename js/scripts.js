@@ -6,18 +6,35 @@ function Ticket(age, time, movie) {
 }
 
 Ticket.prototype.cost = function() {
-  // ticketTotal = 0;
-  baseAdultPrice = 13;
-  baseSeniorPrice = 8;
-  baseMinorPrice = 10;
+  let ticketTotal = 0;
+  let ageIncrement = 0;
+  let timeIncrement = 0;
+  let movieIncrement = 0;
 
-  if(this.age === "adult" && this.time === "matinee") {
-    baseAdultPrice -= 5;
-  } else if(this.age === "senior" && this.time === "matinee") {
-    baseSeniorPrice = 8;
-  } else if(this.age === "minor" && this.time === "matinee") {
-    baseMinorPrice -= 5;
+  if(this.age === "adult") {
+    ageIncrement += 13;
+  } else if(this.age === "senior") {
+    ageIncrement += 8;
+  } else if(this.age === "minor") {
+    ageIncrement += 10;
   }
+  
+  if(this.time === "matinee") {
+    timeIncrement -= 4;
+  } else if(this.age === "evening") {
+    timeIncrement += 2;
+  }
+
+  if(this.movie === "dune") {
+    movieIncrement += 4;
+  } else if(this.movie === "eternals") {
+    movieIncrement += 4;
+  } else if(this.movie === "bond") {
+    movieIncrement += 2;
+  }
+
+  ticketTotal = ageIncrement + timeIncrement + movieIncrement;
+  return ticketTotal;
 }
 
 // UI logic
@@ -25,5 +42,12 @@ Ticket.prototype.cost = function() {
 $(document).ready(function() {
   $("form#movie-choice").submit(function(event) {
     event.preventDefault();
+    const age = $("select#age option:selected").val();
+    const time = $("select#time option:selected").val();
+    const movie = $("select#movie option:selected").val();
+    let ticket = new Ticket(age, time, movie);
+    console.log(ticket);
+    $("#ticket-total").html("$" + ticket.cost())
+    $("#show-results").show();
   });
 });
